@@ -20,14 +20,15 @@
   <a href="#highlights">Highlights</a> •
   <a href="#-where-to-ask-questions">Support</a> •
   <a href="https://github.com/ml-tooling/ssh-proxy/issues/new?labels=bug&template=01_bug-report.md">Report a Bug</a> •
-  <a href="#contribution">Contribution</a>
+  <a href="#-contribution">Contribution</a>
 </p>
 
 This container will make it easy to tunnel ssh targets through the bastion itself to expose them via a single port. The bastion does not allow port forwarding or logging into the bastion itself. Works in Docker and Kubernetes setup. Logins are logged at `/etc/ssh/access.log`.
 
 ## Highlights
 
-_WIP_
+- 🛡 SSH access to behind-firewall clusters without any open ports.
+- 🐳 Easy to deploy via Docker and Kubernetes.
 
 ## Getting Started
 
