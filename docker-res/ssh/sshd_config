@@ -97,7 +97,6 @@ Match User limited-user
     AuthorizedKeysCommandUser root
     ForceCommand echo 'This account can only be used for tunneling.' 
 
-# use 8091 as default ssh port for runtimes? ... there are none services wich have ssh on that port
 # /bin/false Vs /bin/true
 
 Match Host localhost
