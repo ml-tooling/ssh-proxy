@@ -115,7 +115,7 @@ valuable if it's shared publicly so that more people can benefit from it.
 ## 🤝 Contribution
 
 - Pull requests are encouraged and always welcome. Read [`CONTRIBUTING.md`](https://github.com/ml-tooling/ssh-proxy/tree/master/CONTRIBUTING.md) and check out [help-wanted](https://github.com/ml-tooling/ssh-proxy/issues?utf8=%E2%9C%93&q=is%3Aopen+is%3Aissue+label%3A"help+wanted"+sort%3Areactions-%2B1-desc+) issues.
-- Submit github issues for any [feature enhancements](https://github.com/ml-tooling/ml-workspace/issues/new?assignees=&labels=feature-request&template=02_feature-request.md&title=), [bugs](https://github.com/ml-tooling/ssh-proxy/issues/new?assignees=&labels=bug&template=01_bug-report.md&title=), or [documentation](https://github.com/ml-tooling/ssh-proxy/issues/new?assignees=&labels=enhancement%2C+docs&template=03_documentation.md&title=) problems.
+- Submit github issues for any [feature enhancements](https://github.com/ml-tooling/ssh-proxy/issues/new?assignees=&labels=feature-request&template=02_feature-request.md&title=), [bugs](https://github.com/ml-tooling/ssh-proxy/issues/new?assignees=&labels=bug&template=01_bug-report.md&title=), or [documentation](https://github.com/ml-tooling/ssh-proxy/issues/new?assignees=&labels=enhancement%2C+docs&template=03_documentation.md&title=) problems.
 - By participating in this project you agree to abide by its [Code of Conduct](https://github.com/ml-tooling/ssh-proxy/tree/master/CODE_OF_CONDUCT.md).
 
 ---
