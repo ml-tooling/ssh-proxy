@@ -29,20 +29,22 @@ This container will make it easy to tunnel ssh targets through the bastion itsel
 
 - 🛡 SSH access to behind-firewall clusters via a single port.
 - 🐳 Easy to deploy via Docker and Kubernetes.
-- 📄 Access logging
-- 🔐 Restrict target containers based on port and DNS names
+- 🔐 Restrict target containers based on port and DNS pattern.
+- 📄 Basic access logging based on user logins.
 
 ## Getting Started
 
 ### Prerequisites
 
-- The target container names must start with the prefix defined via `$SSH_PERMIT_SERVICE_PREFIX`
+- The target container names must start with the prefix defined via `$SSH_PERMIT_SERVICE_PREFIX`.
+- The SSH target containers must have a valid public key that can be found under `$SSH_TARGET_KEY_PATH` (default: `~/.ssh/id_ed25519.pub`).
 
-The bastion accepts an incoming key, if it belongs to one of the targets key, in other words the bastion server authorizes all target public keys (it is still not possible to login to the bastion directly. The authorization happens only for creating the final connection). For this to work, following requirements have to be fulfilled:
-- The ssh target containers must have a public key that can be found under `/root/.ssh/id_ed25519.pub`
-- In Kubernetes mode, the Bastion and the ssh-targets must be in the same namespace
+> ℹ️ _The SSH proxy accepts an incoming key, if it belongs to one of the targets key, in other words the proxy/bastion server authorizes all target public keys. It is still not possible to login to the bastion directly. The authorization happens only for creating and tunneling the final connection._
 
-The implemented behavior can be slow for big clusters, as `kubectl exec` is a quite slow command.
+- In Kubernetes mode, the SSH proxy and the SSH targets must be in the same namespace.
+
+> ℹ️ _The implemented behavior can be slow for big clusters, as `kubectl exec` is a quite slow command._
+
 You can avoid those requirements by setting `$MANUAL_AUTH_FILE=true` and maintaing the bastion's `/etc/ssh/authorized_keys_cache` file yourself (e.g. by mounting a file at the same location). In this case, you don't have to mount the Docker socket / Kubernetes config into the container. The `authorized_keys_cache` file has the same format as the standard ssh authorized_keys file.
 
 ### Start SSH Proxy
@@ -58,6 +60,8 @@ docker run -d \
 ```
 
 #### Kubernetes
+
+_WIP_
 
 ```bash
 docker run -d \
@@ -79,7 +83,7 @@ ssh \
 
 Doing this way, the connection from client to target is end-to-end encrypted.
 
-> ℹ️ The "\<target-host\>" host can be the Docker container name or Kubernetes service name. In that case, the bastion has to be in the same Docker network or the connection must be allowed in case of existing Networkpolicies in Kubernetes, respectively.
+> ℹ️ _The "\<target-host\>" host can be the Docker container name or Kubernetes service name. In that case, the bastion has to be in the same Docker network or the connection must be allowed in case of existing Networkpolicies in Kubernetes, respectively._
 
 ### Configuration
 
@@ -93,16 +97,19 @@ The container can be configured with the following environment variables (`--env
     </tr>
     <tr>
         <td>SSH_PERMIT_SERVICE_PREFIX</td>
-        <td>Defines which other containers can be ssh targets. The container names must start with the prefix. 
-            The ssh connection to the target can only be made for targets where the name starts with the same prefix. 
-            The '*' character can be used as wildcards, e.g. 'workspace-*' would allow connecting to target containers/services which names start with 'workspace-'.
+        <td>Defines which other containers can be ssh targets. The container names must start with the prefix. The ssh connection to the target can only be made for targets where the name starts with the same prefix. The '*' character can be used as wildcards, e.g. 'workspace-*' would allow connecting to target containers/services which names start with 'workspace-'.
         </td>
-        <td>Mandatory</td>
+        <td>*</td>
     </tr>
     <tr>
         <td>SSH_PERMIT_SERVICE_PORT</td>
         <td>Defines on which port the other containers can be reached via ssh. The ssh connection to the target can only be made via this port then.</td>
         <td>22</td>
+    </tr>
+    <tr>
+        <td>SSH_TARGET_KEY_PATH</td>
+        <td>The path inside the target containers of a valid public key.</td>
+        <td>~/.ssh/id_ed25519.pub</td>
     </tr>
     <tr>
         <td>MANUAL_AUTH_FILE</td>
@@ -112,7 +119,6 @@ The container can be configured with the following environment variables (`--env
 </table>
 
 ## Features
-
 
 ### Access Logging
 
