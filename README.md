@@ -23,12 +23,14 @@
   <a href="#-contribution">Contribution</a>
 </p>
 
-This container will make it easy to tunnel ssh targets through the bastion itself to expose them via a single port. The bastion does not allow port forwarding or logging into the bastion itself. Works in Docker and Kubernetes setup. Logins are logged at `/etc/ssh/access.log`.
+This container will make it easy to tunnel ssh targets through the bastion itself to expose them via a single port. The bastion does not allow port forwarding or logging into the bastion itself.
 
 ## Highlights
 
-- 🛡 SSH access to behind-firewall clusters without any open ports.
+- 🛡 SSH access to behind-firewall clusters via a single port.
 - 🐳 Easy to deploy via Docker and Kubernetes.
+- 📄 Access logging
+- 🔐 Restrict target containers based on port and DNS names
 
 ## Getting Started
 
@@ -99,6 +101,13 @@ The container can be configured with the following environment variables (`--env
         <td>false</td>
     </tr>
 </table>
+
+## Features
+
+
+### Access Logging
+
+Logins are logged at `/etc/ssh/access.log`
 
 ## 💬 Where to ask questions
 
