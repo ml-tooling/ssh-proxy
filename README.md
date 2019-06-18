@@ -45,26 +45,35 @@ The bastion accepts an incoming key, if it belongs to one of the targets key, in
 The implemented behavior can be slow for big clusters, as `kubectl exec` is a quite slow command.
 You can avoid those requirements by setting `$MANUAL_AUTH_FILE=true` and maintaing the bastion's `/etc/ssh/authorized_keys_cache` file yourself (e.g. by mounting a file at the same location). In this case, you don't have to mount the Docker socket / Kubernetes config into the container. The `authorized_keys_cache` file has the same format as the standard ssh authorized_keys file.
 
-### Start SSH Bastion
+### Start SSH Proxy
+
+#### Docker
 
 ```bash
 docker run -d \
-    -p 22 \
+    -p 8091:22 \
     -v /var/run/docker.sock:/var/run/docker.sock \
-    [-v /root/.kube/config:/root/.kube/config] \
     --env SSH_PERMIT_SERVICE_PREFIX=<some-name-prefix> \
     mltooling/ssh-proxy
 ```
 
-- `-v /root/.kube/config:/root/.kube/config` is only needed for a Kubernetes setup
+#### Kubernetes
+
+```bash
+docker run -d \
+    -p 8091:22 \
+    -v /root/.kube/config:/root/.kube/config \
+    --env SSH_PERMIT_SERVICE_PREFIX=<some-name-prefix> \
+    mltooling/ssh-proxy
+```
 
 ### Connect to Target
 
 ```bash
 ssh \
-    -o "ProxyCommand=ssh -W %h:%p -p <bastion-port> -i ~/.ssh/<target-key> limited-user@<bastion-host>" \
+    -o "ProxyCommand=ssh -W %h:%p -p 8091 -i ~/.ssh/<target-key> limited-user@<ssh-proxy-host>" \
     -p <target-port> \
-    -i ~/.ssh/target-key \
+    -i ~/.ssh/<target-key> \
     root@<target-host>
 ```
 
