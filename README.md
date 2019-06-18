@@ -44,7 +44,7 @@ ssh \
 
 Doing this way, the connection from client to target is end-to-end encrypted.
 
-> The "<target-host>" host can be the Docker container name or Kubernetes service name. In that case, the bastion has to be in the same Docker network or the connection must be allowed in case of existing Networkpolicies in Kubernetes, respectively.
+> The "\<target-host\>" host can be the Docker container name or Kubernetes service name. In that case, the bastion has to be in the same Docker network or the connection must be allowed in case of existing Networkpolicies in Kubernetes, respectively.
 
 
 ### Configuration
