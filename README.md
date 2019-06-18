@@ -57,7 +57,10 @@ Doing this way, the connection from client to target is end-to-end encrypted.
     </tr>
     <tr>
         <td>SSH_PERMIT_SERVICE_PREFIX</td>
-        <td>Defines which other containers can be ssh targets. The container names must start with the prefix. The ssh connection to the target can only be made for targets where the name starts with the same prefix.</td>
+        <td>Defines which other containers can be ssh targets. The container names must start with the prefix. 
+            The ssh connection to the target can only be made for targets where the name starts with the same prefix. 
+            The '*' character can be used as wildcards, e.g. 'workspace-*' would allow connecting to target containers/services which names start with 'workspace-'.
+        </td>
         <td>Mandatory</td>
     </tr>
     <tr>
