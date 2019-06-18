@@ -19,6 +19,7 @@ from filelock import FileLock, Timeout
 from subprocess import getoutput
 
 SSH_PERMIT_SERVICE_PREFIX = os.getenv("SSH_PERMIT_SERVICE_PREFIX", "")
+SSH_TARGET_KEY_PATH = os.getenv("SSH_TARGET_KEY_PATH", "~/.ssh/id_ed25519.pub")
 
 authorized_keys_cache_file = "/etc/ssh/authorized_keys_cache"
 authorized_keys_cache_file_lock = "cache_files.lock"
@@ -28,7 +29,7 @@ container_client = None
 CONTAINER_CLIENT_KUBERNETES = "kubernetes"
 CONTAINER_CLIENT_DOCKER = "docker"
 
-PRINT_KEY_COMMAND = ["cat", "/root/.ssh/id_ed25519.pub"]
+PRINT_KEY_COMMAND = ["cat", SSH_TARGET_KEY_PATH]
 
 # First try to find Kubernetes client. If Kubernetes client is not there, use the Docker client
 try:
