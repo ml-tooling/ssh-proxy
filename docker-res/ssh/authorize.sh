@@ -1,6 +1,9 @@
 #!/bin/bash
 # Command to be called by the OpenSSH Server AuthorizedKeysCommand to check whether a valid Runtime container exists
 
+public_key=$1
+echo "$(date) $public_key" >> /etc/ssh/access.log
+
 # If MANUAL_AUTH_FILE is true, another mechanism is supposed to fill the /etc/ssh/authorized_keys_cache file (e.g. a mounted file)
 if [ {MANUAL_AUTH_FILE} = true ]; then
     cat /etc/ssh/authorized_keys_cache;
@@ -11,8 +14,6 @@ fi
 # This script is run in an SSH session and, thus, the environment variable does not exist
 export SSH_PERMIT_SERVICE_PREFIX="{SSH_PERMIT_SERVICE_PREFIX}"
 
-public_key=$1
-echo "$(date) $public_key" >> /etc/ssh/access.log
 CACHE_TIME=$((60 * 15))
 #[ ! -f /etc/ssh/authorized_keys_cache ] && python /etc/ssh/update_authorized_keys.py
 current_date=$(date +%s)
