@@ -3,7 +3,7 @@ import subprocess
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--name', help='name of docker container', default="ssh-bastion")
+parser.add_argument('--name', help='name of docker container', default="ssh-proxy")
 parser.add_argument('--version', help='version tag of docker container', default="latest")
 parser.add_argument('--deploy', help='deploy docker container to remote', action='store_true')
 
