@@ -1,12 +1,35 @@
-# SSH Proxy
+<h1 align="center">
+    SSH Proxy
+</h1>
 
-This container will make it easy to tunnel ssh targets through the bastion itself to expose them via a single port.
-The bastion does not allow port forwarding or logging into the bastion itself.
-Works in Docker and Kubernetes setup.
+<p align="center">
+    <strong>Dockerized SSH bastion to proxy SSH connections to arbitrary containers.</strong>
+</p>
 
-Logins are logged at `/etc/ssh/access.log`.
+<p align="center">
+    <a href="https://hub.docker.com/r/mltooling/ssh-proxy" title="Docker Image Version"><img src="https://images.microbadger.com/badges/version/mltooling/ssh-proxy.svg"></a>
+    <a href="https://hub.docker.com/r/mltooling/ssh-proxy" title="Docker Pulls"><img src="https://img.shields.io/docker/pulls/mltooling/ssh-proxy.svg"></a>
+    <a href="https://hub.docker.com/r/mltooling/ssh-proxy" title="Docker Image Metadata"><img src="https://images.microbadger.com/badges/image/mltooling/ssh-proxy.svg"></a>
+    <a href="https://github.com/ml-tooling/ssh-proxy/blob/develop/LICENSE" title="SSH Proxy License"><img src="https://img.shields.io/badge/License-Apache%202.0-green.svg"></a>
+    <a href="https://gitter.im/ml-tooling/community" title="Chat on Gitter"><img src="https://badges.gitter.im/ml-tooling/community.svg"></a>
+    <a href="https://twitter.com/mltooling" title="ML Tooling on Twitter"><img src="https://img.shields.io/twitter/follow/mltooling.svg?style=social"></a>
+</p>
 
-## Getting started
+<p align="center">
+  <a href="#getting-started">Getting Started</a> •
+  <a href="#highlights">Highlights</a> •
+  <a href="#-where-to-ask-questions">Support</a> •
+  <a href="https://github.com/ml-tooling/ssh-proxy/issues/new?labels=bug&template=01_bug-report.md">Report a Bug</a> •
+  <a href="#contribution">Contribution</a>
+</p>
+
+This container will make it easy to tunnel ssh targets through the bastion itself to expose them via a single port. The bastion does not allow port forwarding or logging into the bastion itself. Works in Docker and Kubernetes setup. Logins are logged at `/etc/ssh/access.log`.
+
+## Highlights
+
+_WIP_
+
+## Getting Started
 
 ### Prerequisites
 
@@ -44,10 +67,11 @@ ssh \
 
 Doing this way, the connection from client to target is end-to-end encrypted.
 
-> The "\<target-host\>" host can be the Docker container name or Kubernetes service name. In that case, the bastion has to be in the same Docker network or the connection must be allowed in case of existing Networkpolicies in Kubernetes, respectively.
-
+> ℹ️ The "\<target-host\>" host can be the Docker container name or Kubernetes service name. In that case, the bastion has to be in the same Docker network or the connection must be allowed in case of existing Networkpolicies in Kubernetes, respectively.
 
 ### Configuration
+
+The container can be configured with the following environment variables (`--env`):
 
 <table>
     <tr>
@@ -74,3 +98,26 @@ Doing this way, the connection from client to target is end-to-end encrypted.
         <td>false</td>
     </tr>
 </table>
+
+## 💬 Where to ask questions
+
+The SSH Proxy project is maintained by [@raethlein](https://twitter.com/raethlein) and [@LukasMasuch](https://twitter.com/LukasMasuch). Please understand that we won't be able
+to provide individual support via email. We also believe that help is much more
+valuable if it's shared publicly so that more people can benefit from it.
+
+| Type                     | Channel                                              |
+| ------------------------ | ------------------------------------------------------ |
+| 🚨 **Bug Reports**       | <a href="https://github.com/ml-tooling/ssh-proxy/issues?utf8=%E2%9C%93&q=is%3Aopen+is%3Aissue+label%3Abug+sort%3Areactions-%2B1-desc+" title="Open Bug Report"><img src="https://img.shields.io/github/issues/ml-tooling/ssh-proxy/bug.svg"></a>                                 |
+| 🎁 **Feature Requests**  | <a href="https://github.com/ml-tooling/ssh-proxy/issues?q=is%3Aopen+is%3Aissue+label%3Afeature-request+sort%3Areactions-%2B1-desc" title="Open Feature Request"><img src="https://img.shields.io/github/issues/ml-tooling/ssh-proxy/feature-request.svg?label=feature%20requests"></a>                                 |
+| 👩‍💻 **Usage Questions**   |  <a href="https://stackoverflow.com/questions/tagged/ml-tooling" title="Open Question on Stackoverflow"><img src="https://img.shields.io/badge/stackoverflow-ml--tooling-orange.svg"></a> <a href="https://gitter.im/ml-tooling/community" title="Chat on Gitter"><img src="https://badges.gitter.im/ml-tooling/community.svg"></a> |
+| 🗯 **General Discussion** | <a href="https://gitter.im/ml-tooling/community" title="Chat on Gitter"><img src="https://badges.gitter.im/ml-tooling/community.svg"></a>  <a href="https://twitter.com/mltooling" title="ML Tooling on Twitter"><img src="https://img.shields.io/twitter/follow/mltooling.svg?style=social"></a>                  |
+
+## 🤝 Contribution
+
+- Pull requests are encouraged and always welcome. Read [`CONTRIBUTING.md`](https://github.com/ml-tooling/ssh-proxy/tree/master/CONTRIBUTING.md) and check out [help-wanted](https://github.com/ml-tooling/ssh-proxy/issues?utf8=%E2%9C%93&q=is%3Aopen+is%3Aissue+label%3A"help+wanted"+sort%3Areactions-%2B1-desc+) issues.
+- Submit github issues for any [feature enhancements](https://github.com/ml-tooling/ml-workspace/issues/new?assignees=&labels=feature-request&template=02_feature-request.md&title=), [bugs](https://github.com/ml-tooling/ssh-proxy/issues/new?assignees=&labels=bug&template=01_bug-report.md&title=), or [documentation](https://github.com/ml-tooling/ssh-proxy/issues/new?assignees=&labels=enhancement%2C+docs&template=03_documentation.md&title=) problems.
+- By participating in this project you agree to abide by its [Code of Conduct](https://github.com/ml-tooling/ssh-proxy/tree/master/CODE_OF_CONDUCT.md).
+
+---
+
+Licensed **Apache 2.0**. Created and maintained with ❤️ by developers from SAP in Berlin. 
