@@ -69,6 +69,12 @@ RUN useradd -d /home/limited-user -m -s /bin/true --gid nogroup --skel /dev/null
 COPY docker-res/start_ssh.py $_RESOURCES_PATH/start_ssh.py
 COPY docker-res/ssh/* /etc/ssh/
 
+# Set default configuration
+ENV SSH_PERMIT_SERVICE_PREFIX="*" \
+    SSH_TARGET_KEY_PATH="~/.ssh/id_ed25519.pub" \ 
+    SSH_PERMIT_SERVICE_PORT="22" \ 
+    MANUAL_AUTH_FILE="false"
+
 RUN \
     chmod -R ug+rwx $_RESOURCES_PATH
 
