@@ -23,7 +23,7 @@
   <a href="#contribution">Contribution</a>
 </p>
 
-This SSH proxy can be deployed as a standalone docker container that allows to proxy any user SSH connection to arbitrary unexposed containers. This enables users to securely access any container via SSH within a cluster only via a single exposed port and provides full SSH compatibility (e.g. port tunneling, scp, sftp, rsync, sshfs, X11 forwarding). This proxy has a few security features built-in to make sure that users can only access target containers that they are allowed to.
+This SSH proxy can be deployed as a standalone docker container that allows to proxy any user SSH connection to arbitrary unexposed containers. This enables users to securely access any container via SSH within a cluster only via a single exposed port and provides full SSH compatibility (e.g. port tunneling, scp, sftp, rsync, sshfs, X11). This proxy has a few security features built-in to make sure that users can only access target containers that they are allowed to.
 
 ## Highlights
 
