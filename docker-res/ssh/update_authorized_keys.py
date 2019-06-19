@@ -17,8 +17,9 @@ from kubernetes import client, config, stream
 import os, sys
 from filelock import FileLock, Timeout
 from subprocess import getoutput
+import re
 
-SSH_PERMIT_TARGET_HOST = os.getenv("SSH_PERMIT_TARGET_HOST", "")
+SSH_PERMIT_TARGET_HOST = os.getenv("SSH_PERMIT_TARGET_HOST", "*")
 SSH_TARGET_KEY_PATH = os.getenv("SSH_TARGET_KEY_PATH", "~/.ssh/id_ed25519.pub")
 
 authorized_keys_cache_file = "/etc/ssh/authorized_keys_cache"
@@ -30,6 +31,10 @@ CONTAINER_CLIENT_KUBERNETES = "kubernetes"
 CONTAINER_CLIENT_DOCKER = "docker"
 
 PRINT_KEY_COMMAND = ["cat", SSH_TARGET_KEY_PATH]
+
+SSH_PERMIT_TARGET_HOST_REGEX = SSH_PERMIT_TARGET_HOST.replace("*", ".*")
+SSH_PERMIT_TARGET_HOST_REGEX = re.compile(SSH_PERMIT_TARGET_HOST_REGEX)
+
 
 # First try to find Kubernetes client. If Kubernetes client is not there, use the Docker client
 try:
@@ -71,8 +76,8 @@ def get_authorized_keys_kubernetes(query_cache=[]):
     new_query_cache = []
     for pod in pod_list.items:
         name = pod.metadata.name
-
-        if name.startswith(SSH_PERMIT_TARGET_HOST) is False:
+        
+        if SSH_PERMIT_TARGET_HOST_REGEX.match(name) is None:
             continue
         elif name in query_cache:
             new_query_cache.append(name)
@@ -107,7 +112,8 @@ def get_authorized_keys_docker(query_cache=[]):
     authorized_keys = []
     new_query_cache = []
     for container in containers:
-        if container.name.startswith(SSH_PERMIT_TARGET_HOST) is False:
+
+        if SSH_PERMIT_TARGET_HOST_REGEX.match(container.name) is None:
             continue
         elif container.id in query_cache:
             new_query_cache.append(container.id)
