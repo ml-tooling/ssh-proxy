@@ -37,7 +37,7 @@ This SSH proxy can be deployed as a standalone docker container that allows to p
 
 ### Prerequisites
 
-- The target container names must start with the prefix defined via `$SSH_PERMIT_SERVICE_PREFIX`.
+- The target container names must start with the prefix defined via `$SSH_PERMIT_TARGET_HOST`.
 - The SSH target containers must have a valid public key that can be found under `$SSH_TARGET_KEY_PATH` (default: `~/.ssh/id_ed25519.pub`).
 
 > ℹ️ _The SSH proxy accepts an incoming key, if it belongs to one of the targets key, in other words the proxy/bastion server authorizes all target public keys. It is still not possible to login to the bastion directly. The authorization happens only for creating and tunneling the final connection._
@@ -56,7 +56,7 @@ You can avoid those requirements by setting `$MANUAL_AUTH_FILE=true` and maintai
 docker run -d \
     -p 8091:22 \
     -v /var/run/docker.sock:/var/run/docker.sock \
-    --env SSH_PERMIT_SERVICE_PREFIX=<some-name-prefix> \
+    --env SSH_PERMIT_TARGET_HOST=<some-name> \
     mltooling/ssh-proxy
 ```
 
@@ -68,7 +68,7 @@ _WIP_
 docker run -d \
     -p 8091:22 \
     -v /root/.kube/config:/root/.kube/config \
-    --env SSH_PERMIT_SERVICE_PREFIX=<some-name-prefix> \
+    --env SSH_PERMIT_TARGET_HOST=<some-name-prefix> \
     mltooling/ssh-proxy
 ```
 
@@ -97,7 +97,7 @@ The container can be configured with the following environment variables (`--env
         <th>Default</th>
     </tr>
     <tr>
-        <td>SSH_PERMIT_SERVICE_PREFIX</td>
+        <td>SSH_PERMIT_TARGET_HOST</td>
         <td>Defines which other containers can be ssh targets. The container names must start with the prefix. The ssh connection to the target can only be made for targets where the name starts with the same prefix. The '*' character can be used as wildcards, e.g. 'workspace-*' would allow connecting to target containers/services which names start with 'workspace-'.
         </td>
         <td>*</td>
@@ -109,7 +109,8 @@ The container can be configured with the following environment variables (`--env
     </tr>
     <tr>
         <td>SSH_TARGET_KEY_PATH</td>
-        <td>The path inside the target containers of a valid public key.</td>
+        <td>The path inside the target containers where the manager looks for a valid public key.
+        Consider that `~` will be resolved to the target container's home.</td>
         <td>~/.ssh/id_ed25519.pub</td>
     </tr>
     <tr>

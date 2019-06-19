@@ -70,7 +70,7 @@ COPY docker-res/start_ssh.py $_RESOURCES_PATH/start_ssh.py
 COPY docker-res/ssh/* /etc/ssh/
 
 # Set default configuration
-ENV SSH_PERMIT_SERVICE_PREFIX="*" \
+ENV SSH_PERMIT_TARGET_HOST="*" \
     SSH_TARGET_KEY_PATH="~/.ssh/id_ed25519.pub" \ 
     SSH_PERMIT_SERVICE_PORT="22" \ 
     MANUAL_AUTH_FILE="false"
