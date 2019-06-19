@@ -37,16 +37,15 @@ This SSH proxy can be deployed as a standalone docker container that allows to p
 
 ### Prerequisites
 
-- The target container names must start with the prefix defined via `$SSH_PERMIT_TARGET_HOST`.
-- The SSH target containers must have a valid public key that can be found under `$SSH_TARGET_KEY_PATH` (default: `~/.ssh/id_ed25519.pub`).
+The target containers must run an SSH server and provide a valid public key that can be found under `$SSH_TARGET_KEY_PATH` (default: `~/.ssh/id_ed25519.pub`).
 
-> ℹ️ _The SSH proxy accepts an incoming key, if it belongs to one of the targets key, in other words the proxy/bastion server authorizes all target public keys. It is still not possible to login to the bastion directly. The authorization happens only for creating and tunneling the final connection._
+> ℹ️ _The SSH proxy accepts an incoming key, if it belongs to one of the targets key, in other words the proxy/bastion server authorizes all target public keys. It is still not possible to login to the proxy directly. The authorization happens only for creating and tunneling the final connection._
 
-- In Kubernetes mode, the SSH proxy and the SSH targets must be in the same namespace.
+Port and hostname of target containers that users are allowed to access can be restricted via environment variables (see [configuration section](#configuration)), but the restrictions can be applied only accross all targets. In Kubernetes mode, the SSH proxy and the SSH targets must be in the same namespace.
 
 > ℹ️ _The implemented behavior can be slow for big clusters, as `kubectl exec` is a quite slow command._
 
-You can avoid those requirements by setting `$MANUAL_AUTH_FILE=true` and maintaing the bastion's `/etc/ssh/authorized_keys_cache` file yourself (e.g. by mounting a file at the same location). In this case, you don't have to mount the Docker socket / Kubernetes config into the container. The `authorized_keys_cache` file has the same format as the standard ssh authorized_keys file.
+You can avoid those requirements by setting `$MANUAL_AUTH_FILE=true` and maintaing the proxy's `/etc/ssh/authorized_keys_cache` file yourself (e.g. by mounting a file at the same location). In this case, you don't have to mount the Docker socket / Kubernetes config into the container. The `authorized_keys_cache` file has the same format as the standard ssh authorized_keys file.
 
 ### Start SSH Proxy
 
@@ -104,7 +103,7 @@ The container can be configured with the following environment variables (`--env
     </tr>
     <tr>
         <td>SSH_PERMIT_TARGET_PORT</td>
-        <td>Defines on which port the other containers can be reached via ssh. The ssh connection to the target can only be made via this port then.</td>
+        <td>Defines on which port the other containers can be reached via ssh. The ssh connection to the target can only be made via this port then. An argument of '*' can be used to permit any port.</td>
         <td>22</td>
     </tr>
     <tr>
@@ -126,7 +125,7 @@ The container can be configured with the following environment variables (`--env
 
 Logins are logged at `/etc/ssh/access.log`
 
-# Support
+## Support
 
 The SSH Proxy project is maintained by [@raethlein](https://twitter.com/raethlein) and [@LukasMasuch](https://twitter.com/LukasMasuch). Please understand that we won't be able
 to provide individual support via email. We also believe that help is much more
