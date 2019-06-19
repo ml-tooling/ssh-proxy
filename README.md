@@ -18,9 +18,9 @@
 <p align="center">
   <a href="#getting-started">Getting Started</a> •
   <a href="#highlights">Highlights</a> •
-  <a href="#-where-to-ask-questions">Support</a> •
+  <a href="#where-to-ask-questions">Support</a> •
   <a href="https://github.com/ml-tooling/ssh-proxy/issues/new?labels=bug&template=01_bug-report.md">Report a Bug</a> •
-  <a href="#-contribution">Contribution</a>
+  <a href="#contribution">Contribution</a>
 </p>
 
 This container will make it easy to tunnel ssh targets through the bastion itself to expose them via a single port. The bastion does not allow port forwarding or logging into the bastion itself.
@@ -124,7 +124,7 @@ The container can be configured with the following environment variables (`--env
 
 Logins are logged at `/etc/ssh/access.log`
 
-## 💬 Where to ask questions
+# Where to ask questions
 
 The SSH Proxy project is maintained by [@raethlein](https://twitter.com/raethlein) and [@LukasMasuch](https://twitter.com/LukasMasuch). Please understand that we won't be able
 to provide individual support via email. We also believe that help is much more
@@ -137,7 +137,7 @@ valuable if it's shared publicly so that more people can benefit from it.
 | 👩‍💻 **Usage Questions**   |  <a href="https://stackoverflow.com/questions/tagged/ml-tooling" title="Open Question on Stackoverflow"><img src="https://img.shields.io/badge/stackoverflow-ml--tooling-orange.svg"></a> <a href="https://gitter.im/ml-tooling/community" title="Chat on Gitter"><img src="https://badges.gitter.im/ml-tooling/community.svg"></a> |
 | 🗯 **General Discussion** | <a href="https://gitter.im/ml-tooling/community" title="Chat on Gitter"><img src="https://badges.gitter.im/ml-tooling/community.svg"></a>  <a href="https://twitter.com/mltooling" title="ML Tooling on Twitter"><img src="https://img.shields.io/twitter/follow/mltooling.svg?style=social"></a>                  |
 
-## 🤝 Contribution
+## Contribution
 
 - Pull requests are encouraged and always welcome. Read [`CONTRIBUTING.md`](https://github.com/ml-tooling/ssh-proxy/tree/master/CONTRIBUTING.md) and check out [help-wanted](https://github.com/ml-tooling/ssh-proxy/issues?utf8=%E2%9C%93&q=is%3Aopen+is%3Aissue+label%3A"help+wanted"+sort%3Areactions-%2B1-desc+) issues.
 - Submit github issues for any [feature enhancements](https://github.com/ml-tooling/ssh-proxy/issues/new?assignees=&labels=feature-request&template=02_feature-request.md&title=), [bugs](https://github.com/ml-tooling/ssh-proxy/issues/new?assignees=&labels=bug&template=01_bug-report.md&title=), or [documentation](https://github.com/ml-tooling/ssh-proxy/issues/new?assignees=&labels=enhancement%2C+docs&template=03_documentation.md&title=) problems.
