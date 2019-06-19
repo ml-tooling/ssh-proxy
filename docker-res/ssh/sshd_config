@@ -86,7 +86,7 @@ Match User limited-user
     GatewayPorts no
     AllowTcpForwarding yes
     # placeholder are replaced by run.py
-    PermitOpen {PERMIT_SERVICE_PREFIX}*:{PERMIT_SERVICE_PORT}
+    PermitOpen {SSH_PERMIT_TARGET_HOST}:{PERMIT_SERVICE_PORT}
     PermitListen none
     PermitTTY no
     PermitTunnel no

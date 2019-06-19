@@ -18,7 +18,7 @@ import os, sys
 from filelock import FileLock, Timeout
 from subprocess import getoutput
 
-SSH_PERMIT_SERVICE_PREFIX = os.getenv("SSH_PERMIT_SERVICE_PREFIX", "")
+SSH_PERMIT_TARGET_HOST = os.getenv("SSH_PERMIT_TARGET_HOST", "")
 SSH_TARGET_KEY_PATH = os.getenv("SSH_TARGET_KEY_PATH", "~/.ssh/id_ed25519.pub")
 
 authorized_keys_cache_file = "/etc/ssh/authorized_keys_cache"
@@ -53,7 +53,7 @@ if container_client is None:
 
 def get_authorized_keys_kubernetes(query_cache=[]):
     """
-    Execs into all Kubernetes pods where the name starts with `SSH_PERMIT_SERVICE_PREFIX` and returns it's public key.
+    Execs into all Kubernetes pods where the name complies to `SSH_PERMIT_TARGET_HOST` and returns it's public key.
 
     # Note: This method can be quite slow. For big setups / clusters, think about rewriting it to fetch public keys from a REST API or so.
 
@@ -72,7 +72,7 @@ def get_authorized_keys_kubernetes(query_cache=[]):
     for pod in pod_list.items:
         name = pod.metadata.name
 
-        if name.startswith(SSH_PERMIT_SERVICE_PREFIX) is False:
+        if name.startswith(SSH_PERMIT_TARGET_HOST) is False:
             continue
         elif name in query_cache:
             new_query_cache.append(name)
@@ -90,7 +90,7 @@ def get_authorized_keys_kubernetes(query_cache=[]):
 
 def get_authorized_keys_docker(query_cache=[]):
     """
-    Execs into all Docker containers where the name starts with `SSH_PERMIT_SERVICE_PREFIX` and returns it's public key.
+    Execs into all Docker containers where the name starts with `SSH_PERMIT_TARGET_HOST` and returns it's public key.
 
     # Note: This method can be quite slow. For big setups / clusters, think about rewriting it to fetch public keys from a REST API or so.
 
@@ -107,7 +107,7 @@ def get_authorized_keys_docker(query_cache=[]):
     authorized_keys = []
     new_query_cache = []
     for container in containers:
-        if container.name.startswith(SSH_PERMIT_SERVICE_PREFIX) is False:
+        if container.name.startswith(SSH_PERMIT_TARGET_HOST) is False:
             continue
         elif container.id in query_cache:
             new_query_cache.append(container.id)
