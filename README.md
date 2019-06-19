@@ -18,7 +18,7 @@
 <p align="center">
   <a href="#getting-started">Getting Started</a> •
   <a href="#highlights">Highlights</a> •
-  <a href="#where-to-ask-questions">Support</a> •
+  <a href="#support">Support</a> •
   <a href="https://github.com/ml-tooling/ssh-proxy/issues/new?labels=bug&template=01_bug-report.md">Report a Bug</a> •
   <a href="#contribution">Contribution</a>
 </p>
@@ -28,10 +28,10 @@ This SSH proxy can be deployed as a standalone docker container that allows to p
 ## Highlights
 
 - 🛡 SSH access to behind-firewall clusters via a single port.
-- 🐳 Easy to deploy via Docker and Kubernetes.
 - 🔐 Restrict target containers based on port and DNS pattern.
 - 🛠 Full SSH compatibility (port tunneling, scp, sftp, rsync, sshfs).
 - 📄 Basic access logging based on user logins.
+- 🐳 Easy to deploy via Docker and Kubernetes.
 
 ## Getting Started
 
@@ -126,7 +126,7 @@ The container can be configured with the following environment variables (`--env
 
 Logins are logged at `/etc/ssh/access.log`
 
-# Where to ask questions
+# Support
 
 The SSH Proxy project is maintained by [@raethlein](https://twitter.com/raethlein) and [@LukasMasuch](https://twitter.com/LukasMasuch). Please understand that we won't be able
 to provide individual support via email. We also believe that help is much more
