@@ -104,6 +104,11 @@ The container can be configured with the following environment variables (`--env
         <td>Defines on which port the other containers can be reached via ssh. The ssh connection to the target can only be made via this port then.</td>
         <td>22</td>
     </tr>
+     <tr>
+        <td>PUBLIC_KEY_NAME</td>
+        <td>Define the key name for which the manager looks in the runtime containers under $HOME/.ssh/$PUBLIC_KEY_NAME</td>
+        <td>id_ed25519.pub</td>
+    </tr>
     <tr>
         <td>MANUAL_AUTH_FILE</td>
         <td>Disables the bastion's public key fetching method and you have to maintain the /etc/ssh/authorized_keys_cache file yourself (e.g. by mounting a respective file there)</td>
