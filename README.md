@@ -18,19 +18,20 @@
 <p align="center">
   <a href="#getting-started">Getting Started</a> •
   <a href="#highlights">Highlights</a> •
-  <a href="#where-to-ask-questions">Support</a> •
+  <a href="#support">Support</a> •
   <a href="https://github.com/ml-tooling/ssh-proxy/issues/new?labels=bug&template=01_bug-report.md">Report a Bug</a> •
   <a href="#contribution">Contribution</a>
 </p>
 
-This container will make it easy to tunnel ssh targets through the bastion itself to expose them via a single port. The bastion does not allow port forwarding or logging into the bastion itself.
+This SSH proxy can be deployed as a standalone docker container that allows to proxy any user SSH connection to arbitrary unexposed containers. This enables users to securely access any container via SSH within a cluster only via a single exposed port and provides full SSH compatibility (e.g. port tunneling, scp, sftp, rsync, sshfs, X11). This proxy has a few security features built-in to make sure that users can only access target containers that they are allowed to.
 
 ## Highlights
 
 - 🛡 SSH access to behind-firewall clusters via a single port.
-- 🐳 Easy to deploy via Docker and Kubernetes.
 - 🔐 Restrict target containers based on port and DNS pattern.
+- 🛠 Full SSH compatibility (port tunneling, scp, sftp, rsync, sshfs).
 - 📄 Basic access logging based on user logins.
+- 🐳 Easy to deploy via Docker and Kubernetes.
 
 ## Getting Started
 
@@ -125,7 +126,7 @@ The container can be configured with the following environment variables (`--env
 
 Logins are logged at `/etc/ssh/access.log`
 
-# Where to ask questions
+# Support
 
 The SSH Proxy project is maintained by [@raethlein](https://twitter.com/raethlein) and [@LukasMasuch](https://twitter.com/LukasMasuch). Please understand that we won't be able
 to provide individual support via email. We also believe that help is much more
