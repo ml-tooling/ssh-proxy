@@ -23,13 +23,14 @@
   <a href="#contribution">Contribution</a>
 </p>
 
-This container will make it easy to tunnel ssh targets through the bastion itself to expose them via a single port. The bastion does not allow port forwarding or logging into the bastion itself.
+This SSH proxy can be deployed as a standalone docker container that allows to proxy any user SSH connection to arbitrary unexposed containers. This enables users to securely access any container via SSH within a cluster only via a single exposed port and provides full SSH compatibility (e.g. port tunneling, scp, sftp, rsync, sshfs, X11 forwarding). This proxy has a few security features built-in to make sure that users can only access target containers that they are allowed to.
 
 ## Highlights
 
 - 🛡 SSH access to behind-firewall clusters via a single port.
 - 🐳 Easy to deploy via Docker and Kubernetes.
 - 🔐 Restrict target containers based on port and DNS pattern.
+- 🛠 Full SSH compatibility (port tunneling, scp, sftp, rsync, sshfs).
 - 📄 Basic access logging based on user logins.
 
 ## Getting Started
