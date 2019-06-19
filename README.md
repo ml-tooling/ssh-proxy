@@ -97,12 +97,12 @@ The container can be configured with the following environment variables (`--env
     </tr>
     <tr>
         <td>SSH_PERMIT_TARGET_HOST</td>
-        <td>Defines which other containers can be ssh targets. The container names must start with the prefix. The ssh connection to the target can only be made for targets where the name starts with the same prefix. The '*' character can be used as wildcards, e.g. 'workspace-*' would allow connecting to target containers/services which names start with 'workspace-'.
+        <td>Defines which other containers can be ssh targets. The container names must start with the prefix. The ssh connection to the target can only be made for targets where the name matches the given target host. The '*' character can be used as wildcards, e.g. 'workspace-*' would allow connecting to target containers/services which names start with 'workspace-'.
         </td>
         <td>*</td>
     </tr>
     <tr>
-        <td>SSH_PERMIT_SERVICE_PORT</td>
+        <td>SSH_PERMIT_TARGET_PORT</td>
         <td>Defines on which port the other containers can be reached via ssh. The ssh connection to the target can only be made via this port then.</td>
         <td>22</td>
     </tr>
