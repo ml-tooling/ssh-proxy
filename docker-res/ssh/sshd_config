@@ -59,7 +59,8 @@ TCPKeepAlive yes
 # Allow client to pass locale environment variables
 AcceptEnv LANG LC_*
 
-Subsystem sftp /usr/lib/openssh/sftp-server
+# Do not activate sftp?
+# Subsystem sftp /usr/lib/openssh/sftp-server
 
 PermitUserEnvironment yes
 ClientAliveInterval 60
