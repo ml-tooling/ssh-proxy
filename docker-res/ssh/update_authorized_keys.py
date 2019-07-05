@@ -137,7 +137,8 @@ def update_cache_file():
             write_mode = 'a'
             # Delete query_cache file in case it is a 'full' run
             if len(sys.argv) == 2 and sys.argv[1] == "full":
-                os.remove(query_cache_file)
+                if os.path.isfile(query_cache_file):
+                    os.remove(query_cache_file)
                 write_mode = 'w'
 
             query_cache = []
