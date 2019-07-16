@@ -3,12 +3,13 @@ FROM ubuntu:16.04
 # Basics
 ENV _RESOURCES_PATH="/resources"
 
+# Layer cleanup script
+COPY docker-res/scripts/clean-layer.sh /usr/bin/clean-layer.sh
+
 RUN \
     mkdir $_RESOURCES_PATH && \
-    chmod ug+rwx $_RESOURCES_PATH
-
-# Layer cleanup script
-COPY docker-res/scripts/clean_layer.sh $_RESOURCES_PATH/clean_layer.sh
+    chmod ug+rwx $_RESOURCES_PATH && \
+    chmod a+rwx /usr/bin/clean-layer.sh
 
 RUN \
     apt-get update && \
@@ -17,10 +18,8 @@ RUN \
         python3-pip    && \
         ln -s /usr/bin/pip3 /usr/bin/pip && \
         ln -s /usr/bin/python3 /usr/bin/python && \
-    # Make clean layer executable
-    chmod a+rwx $_RESOURCES_PATH/clean_layer.sh && \
     # Cleanup
-    $_RESOURCES_PATH/clean_layer.sh
+    clean-layer.sh
 
 # SSH Server
 ## Install & Prepare SSH
@@ -49,7 +48,7 @@ RUN \
     pip install kubernetes && \
     pip install docker && \
     # Cleanup
-    $_RESOURCES_PATH/clean_layer.sh
+    clean-layer.sh
 
 ## Create user with restricted permissions for ssh
 # https://gist.github.com/smoser/3e9430c51e23e0c0d16c359a2ca668ae
