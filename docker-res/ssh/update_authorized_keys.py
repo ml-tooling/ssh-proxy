@@ -34,7 +34,7 @@ SSH_PERMIT_TARGET_HOST_REGEX = SSH_PERMIT_TARGET_HOST.replace("*", ".*")
 SSH_PERMIT_TARGET_HOST_REGEX = re.compile(SSH_PERMIT_TARGET_HOST_REGEX)
 
 
-# First try to find Kubernetes client. If Kubernetes client is not there, use the Docker client
+# First try to find Kubernetes client. If Kubernetes client or the config is not there, use the Docker client
 try:
     config.load_kube_config()
     kubernetes_client = client.CoreV1Api()
@@ -43,7 +43,7 @@ try:
     # at this path the namespace the container is in is stored in Kubernetes deployment (see https://stackoverflow.com/questions/31557932/how-to-get-the-namespace-from-inside-a-pod-in-openshift)
     NAMESPACE = getoutput(
         "cat /var/run/secrets/kubernetes.io/serviceaccount/namespace")
-except FileNotFoundError:
+except (FileNotFoundError, TypeError):
     try:
         docker_client = docker.from_env()
         docker_client.ping()
