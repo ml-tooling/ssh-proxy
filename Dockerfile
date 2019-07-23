@@ -70,8 +70,8 @@ COPY docker-res/ssh/* /etc/ssh/
 
 # Set default configuration
 ENV SSH_PERMIT_TARGET_HOST="*" \
+    SSH_PERMIT_TARGET_PORT="*" \ 
     SSH_TARGET_KEY_PATH="~/.ssh/id_ed25519.pub" \ 
-    SSH_PERMIT_TARGET_PORT="22" \ 
     MANUAL_AUTH_FILE="false"
 
 RUN \

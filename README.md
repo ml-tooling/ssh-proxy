@@ -103,8 +103,8 @@ The container can be configured with the following environment variables (`--env
     </tr>
     <tr>
         <td>SSH_PERMIT_TARGET_PORT</td>
-        <td>Defines on which port the other containers can be reached via ssh. The ssh connection to the target can only be made via this port then. An argument of '*' can be used to permit any port.</td>
-        <td>22</td>
+        <td>Defines on which port the other containers can be reached via ssh. The ssh connection to the target can only be made via this port then. The default value '*' permits any port.</td>
+        <td>*</td>
     </tr>
     <tr>
         <td>SSH_TARGET_KEY_PATH</td>
