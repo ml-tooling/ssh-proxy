@@ -36,7 +36,11 @@ SSH_PERMIT_TARGET_HOST_REGEX = re.compile(SSH_PERMIT_TARGET_HOST_REGEX)
 
 # First try to find Kubernetes client. If Kubernetes client or the config is not there, use the Docker client
 try:
-    config.load_kube_config()
+    try:
+        # incluster config is the config given by a service account and it's role permissions
+        config.load_incluster_config()
+    except config.ConfigException:
+        config.load_kube_config()
     kubernetes_client = client.CoreV1Api()
     container_client = CONTAINER_CLIENT_KUBERNETES
 
