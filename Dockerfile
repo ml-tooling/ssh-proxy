@@ -1,4 +1,4 @@
-FROM ubuntu:16.04
+FROM ubuntu:18.04
 
 # Basics
 ENV _RESOURCES_PATH="/resources"
@@ -15,6 +15,7 @@ RUN \
     apt-get update && \
     apt-get install -y \
         wget \
+        python3 \
         python3-pip    && \
         ln -s /usr/bin/pip3 /usr/bin/pip && \
         ln -s /usr/bin/python3 /usr/bin/python && \
