@@ -10,9 +10,9 @@ if [ {MANUAL_AUTH_FILE} = true ]; then
     exit
 fi 
 
-# Must be replaced during container startup with the value of the environment variable.
-# This script is run in an SSH session and, thus, the environment variable does not exist
-export SSH_PERMIT_TARGET_HOST="{SSH_PERMIT_TARGET_HOST}"
+# Read environment variables from file to access general environment variables
+# This script is run in an SSH session and, thus, the environment variables do not exist otherwise
+source $SSHD_ENVIRONMENT_VARIABLES
 
 CACHE_TIME=$((60 * 15))
 #[ ! -f /etc/ssh/authorized_keys_cache ] && python /etc/ssh/update_authorized_keys.py

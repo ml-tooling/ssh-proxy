@@ -73,9 +73,15 @@ COPY docker-res/ssh/* /etc/ssh/
 ENV SSH_PERMIT_TARGET_HOST="*" \
     SSH_PERMIT_TARGET_PORT="*" \ 
     SSH_TARGET_KEY_PATH="~/.ssh/id_ed25519.pub" \ 
-    MANUAL_AUTH_FILE="false"
+    MANUAL_AUTH_FILE="false" \
+    SSHD_ENVIRONMENT_VARIABLES="${_RESOURCES_PATH}/sshd_environment"
 
 RUN \
-    chmod -R ug+rwx $_RESOURCES_PATH
+    chmod -R ug+rwx $_RESOURCES_PATH && \
+    touch $SSHD_ENVIRONMENT_VARIABLES && \
+    chmod a+r $SSHD_ENVIRONMENT_VARIABLES && \
+    # Replace the environment variable in the script directly here, since the script is executed from sshd shell and cannot 
+    # access the environment variable directly 
+    sed -i 's@$SSHD_ENVIRONMENT_VARIABLES@'"$SSHD_ENVIRONMENT_VARIABLES"'@g' /etc/ssh/authorize.sh
 
 ENTRYPOINT python $_RESOURCES_PATH/start_ssh.py
