@@ -101,7 +101,8 @@ def get_authorized_keys_kubernetes(query_cache: list = []) -> (list, list):
         except requests.exceptions.ConnectTimeout:
             print("Connection to {ip} timed out after {timeout} seconds. Will try to exec into the pod to retrieve the key.".format(ip=pod_ip, timeout=str(timeout_seconds)))
 
-        # If the API call did not work, try to exec into the pdo
+        # If the API call did not work, try to exec into the pod. 
+        # Make sure that the executing process has permission to exec into the target pod (e.g. when Kubernetes roles are used)
         if key is None:
             try:
                 exec_result = stream.stream(kubernetes_client.connect_get_namespaced_pod_exec, name,
