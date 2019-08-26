@@ -16,6 +16,7 @@ import sys
 from filelock import FileLock, Timeout
 from subprocess import getoutput
 import re
+import requests
 
 SSH_PERMIT_TARGET_HOST = os.getenv("SSH_PERMIT_TARGET_HOST", "*")
 SSH_TARGET_KEY_PATH = os.getenv("SSH_TARGET_KEY_PATH", "~/.ssh/id_ed25519.pub")
@@ -81,6 +82,7 @@ def get_authorized_keys_kubernetes(query_cache: list = []) -> (list, list):
     new_query_cache = []
     for pod in pod_list.items:
         name = pod.metadata.name
+        pod_ip = pod.status.pod_ip
 
         if SSH_PERMIT_TARGET_HOST_REGEX.match(name) is None:
             continue
@@ -88,14 +90,30 @@ def get_authorized_keys_kubernetes(query_cache: list = []) -> (list, list):
             new_query_cache.append(name)
             continue
 
+        key = None
+        # Try to get the public key via an API call first
+        publickey_url = "http://{}:8091/publickey".format(pod_ip)
+        timeout_seconds = 10
         try:
-            exec_result = stream.stream(kubernetes_client.connect_get_namespaced_pod_exec, name,
-                                        NAMESPACE, command=PRINT_KEY_COMMAND, stderr=True, stdin=False, stdout=True, tty=False)
-            authorized_keys.append(exec_result)
+            request = requests.request("GET", publickey_url, timeout=timeout_seconds)
+            if request.status_code == 200:
+                key = request.text
+        except requests.exceptions.ConnectTimeout:
+            print("Connection to {ip} timed out after {timeout} seconds. Will try to exec into the pod to retrieve the key.".format(ip=pod_ip, timeout=str(timeout_seconds)))
+
+        # If the API call did not work, try to exec into the pdo
+        if key is None:
+            try:
+                exec_result = stream.stream(kubernetes_client.connect_get_namespaced_pod_exec, name,
+                                            NAMESPACE, command=PRINT_KEY_COMMAND, stderr=True, stdin=False, stdout=True, tty=False)
+                key = exec_result
+            except:
+                # This can happen when the pod is in a false state such as Terminating, as status.phase is 'Running' but pod cannot be reached anymore
+                print("Could not reach pod {}".format(name))
+
+        if key is not None:
+            authorized_keys.append(key)
             new_query_cache.append(name)
-        except:
-            # This can happen when the pod is in a false state such as Terminating, as status.phase is 'Running' but pod cannot be reached anymore
-            print("Could not reach pod {}".format(name))
 
     return authorized_keys, new_query_cache
 
