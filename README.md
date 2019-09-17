@@ -37,7 +37,7 @@ This SSH proxy can be deployed as a standalone docker container that allows to p
 
 ### Prerequisites
 
-The target containers must run an SSH server and provide a valid public key via a `/publickey` endpoint. If this does not exist, the ssh-proxy tries to exec into the target container and search for the publickey under under `$SSH_TARGET_KEY_PATH` (default: `~/.ssh/id_ed25519.pub`).
+The target containers must run an SSH server and provide a valid public key. The ssh-proxy container will try to get a key from a target container via a `/publickey` endpoint; if this does not exist, the ssh-proxy tries to exec into the target container and search for the publickey under `$SSH_TARGET_KEY_PATH` (default: `~/.ssh/id_ed25519.pub`).
 
 > ℹ️ _The SSH proxy accepts an incoming key, if it belongs to one of the targets key, in other words the proxy/bastion server authorizes all target public keys. It is still not possible to login to the proxy directly. The authorization happens only for creating and tunneling the final connection._
 
@@ -55,21 +55,12 @@ You can avoid those requirements by setting `$MANUAL_AUTH_FILE=true` and maintai
 docker run -d \
     -p 8091:22 \
     -v /var/run/docker.sock:/var/run/docker.sock \
-    --env SSH_PERMIT_TARGET_HOST=<some-name> \
     mltooling/ssh-proxy
 ```
 
 #### Kubernetes
 
-_WIP_
-
-```bash
-docker run -d \
-    -p 8091:22 \
-    -v /root/.kube/config:/root/.kube/config \
-    --env SSH_PERMIT_TARGET_HOST=<some-name-prefix> \
-    mltooling/ssh-proxy
-```
+If you make a kube config available to the container, either via incluster config (Python code: `kubernetes.config.load_incluster_config()`) or by mounting it to `/root/.kube/config`, ssh-proxy also works for tunneling requests in Kubernetes.
 
 ### Connect to Target
 
@@ -108,7 +99,7 @@ The container can be configured with the following environment variables (`--env
     </tr>
     <tr>
         <td>SSH_TARGET_PUBLICKEY_API_PORT</td>
-        <td>Port where the target pod exposes the /publickey endpoint (if used).</td>
+        <td>Port where the target container exposes the /publickey endpoint (if used).</td>
         <td>8080</td>
     </tr> 
     <tr>
