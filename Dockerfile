@@ -74,7 +74,8 @@ ENV SSH_PERMIT_TARGET_HOST="*" \
     SSH_PERMIT_TARGET_PORT="*" \ 
     SSH_TARGET_KEY_PATH="~/.ssh/id_ed25519.pub" \ 
     MANUAL_AUTH_FILE="false" \
-    SSHD_ENVIRONMENT_VARIABLES="${_RESOURCES_PATH}/sshd_environment"
+    SSHD_ENVIRONMENT_VARIABLES="${_RESOURCES_PATH}/sshd_environment" \
+    SSH_TARGET_PUBLICKEY_API_PORT=8080
 
 RUN \
     chmod -R ug+rwx $_RESOURCES_PATH && \

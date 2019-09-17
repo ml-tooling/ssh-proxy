@@ -37,7 +37,7 @@ This SSH proxy can be deployed as a standalone docker container that allows to p
 
 ### Prerequisites
 
-The target containers must run an SSH server and provide a valid public key that can be found under `$SSH_TARGET_KEY_PATH` (default: `~/.ssh/id_ed25519.pub`).
+The target containers must run an SSH server and provide a valid public key via a `/publickey` endpoint. If this does not exist, the ssh-proxy tries to exec into the target container and search for the publickey under under `$SSH_TARGET_KEY_PATH` (default: `~/.ssh/id_ed25519.pub`).
 
 > ℹ️ _The SSH proxy accepts an incoming key, if it belongs to one of the targets key, in other words the proxy/bastion server authorizes all target public keys. It is still not possible to login to the proxy directly. The authorization happens only for creating and tunneling the final connection._
 
@@ -107,14 +107,19 @@ The container can be configured with the following environment variables (`--env
         <td>*</td>
     </tr>
     <tr>
+        <td>SSH_TARGET_PUBLICKEY_API_PORT</td>
+        <td>Port where the target pod exposes the /publickey endpoint (if used).</td>
+        <td>8080</td>
+    </tr> 
+    <tr>
         <td>SSH_TARGET_KEY_PATH</td>
         <td>The path inside the target containers where the manager looks for a valid public key.
-        Consider that `~` will be resolved to the target container's home.</td>
+        Consider that `~` will be resolved to the target container's home. Only used when the target container does not return a public key via the /publickey endpoint.</td>
         <td>~/.ssh/id_ed25519.pub</td>
     </tr>
     <tr>
         <td>MANUAL_AUTH_FILE</td>
-        <td>Disables the bastion's public key fetching method and you have to maintain the /etc/ssh/authorized_keys_cache file yourself (e.g. by mounting a respective file there)</td>
+        <td>Disables the bastion's public key fetching method and you have to maintain the /etc/ssh/authorized_keys_cache file yourself (e.g. by mounting a respective file there). Only used when the target container does not return a public key via the /publickey endpoint.</td>
         <td>false</td>
     </tr>
 </table>
