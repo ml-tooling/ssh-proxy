@@ -1,18 +1,19 @@
 #!/bin/bash
 # Command to be called by the OpenSSH Server AuthorizedKeysCommand to check whether a valid Runtime container exists
 
+public_key=$1
+echo "$(date) $public_key" >> /etc/ssh/access.log
+
 # If MANUAL_AUTH_FILE is true, another mechanism is supposed to fill the /etc/ssh/authorized_keys_cache file (e.g. a mounted file)
 if [ {MANUAL_AUTH_FILE} = true ]; then
     cat /etc/ssh/authorized_keys_cache;
     exit
 fi 
 
-# Must be replaced during container startup with the value of the environment variable.
-# This script is run in an SSH session and, thus, the environment variable does not exist
-export SSH_PERMIT_SERVICE_PREFIX="{SSH_PERMIT_SERVICE_PREFIX}"
+# Read environment variables from file to access general environment variables
+# This script is run in an SSH session and, thus, the environment variables do not exist otherwise
+source $SSHD_ENVIRONMENT_VARIABLES
 
-public_key=$1
-echo "$(date) $public_key" >> /etc/ssh/access.log
 CACHE_TIME=$((60 * 15))
 #[ ! -f /etc/ssh/authorized_keys_cache ] && python /etc/ssh/update_authorized_keys.py
 current_date=$(date +%s)
@@ -26,7 +27,7 @@ time_difference=$(($current_date - $cache_last_modified))
 # Check for " $public_key " with spaces before and after to prevent matching parts of a key
 SHORTER_CACHE_TIME=$((60 * 2))
 if [ ! -f etc/ssh/authorized_keys_cache ]; then
-    python /etc/ssh/update_authorized_keys.py
+    python /etc/ssh/update_authorized_keys.py full
 elif ! grep -q " $public_key " /etc/ssh/authorized_keys_cache; then
     if [ $time_difference -ge $SHORTER_CACHE_TIME ]; then
         python /etc/ssh/update_authorized_keys.py

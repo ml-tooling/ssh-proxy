@@ -59,7 +59,8 @@ TCPKeepAlive yes
 # Allow client to pass locale environment variables
 AcceptEnv LANG LC_*
 
-Subsystem sftp /usr/lib/openssh/sftp-server
+# Do not activate sftp?
+# Subsystem sftp /usr/lib/openssh/sftp-server
 
 PermitUserEnvironment yes
 ClientAliveInterval 60
@@ -86,7 +87,7 @@ Match User limited-user
     GatewayPorts no
     AllowTcpForwarding yes
     # placeholder are replaced by run.py
-    PermitOpen {PERMIT_SERVICE_PREFIX}*:{PERMIT_SERVICE_PORT}
+    PermitOpen {SSH_PERMIT_TARGET_HOST}:{SSH_PERMIT_TARGET_PORT}
     PermitListen none
     PermitTTY no
     PermitTunnel no
@@ -97,7 +98,6 @@ Match User limited-user
     AuthorizedKeysCommandUser root
     ForceCommand echo 'This account can only be used for tunneling.' 
 
-# use 8091 as default ssh port for runtimes? ... there are none services wich have ssh on that port
 # /bin/false Vs /bin/true
 
 Match Host localhost

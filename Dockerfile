@@ -1,26 +1,26 @@
-FROM ubuntu:16.04
+FROM ubuntu:18.04
 
 # Basics
 ENV _RESOURCES_PATH="/resources"
 
+# Layer cleanup script
+COPY docker-res/scripts/clean-layer.sh /usr/bin/clean-layer.sh
+
 RUN \
     mkdir $_RESOURCES_PATH && \
-    chmod ug+rwx $_RESOURCES_PATH
-
-# Layer cleanup script
-COPY docker-res/scripts/clean_layer.sh $_RESOURCES_PATH/clean_layer.sh
+    chmod ug+rwx $_RESOURCES_PATH && \
+    chmod a+rwx /usr/bin/clean-layer.sh
 
 RUN \
     apt-get update && \
     apt-get install -y \
         wget \
+        python3 \
         python3-pip    && \
         ln -s /usr/bin/pip3 /usr/bin/pip && \
         ln -s /usr/bin/python3 /usr/bin/python && \
-    # Make clean layer executable
-    chmod a+rwx $_RESOURCES_PATH/clean_layer.sh && \
     # Cleanup
-    $_RESOURCES_PATH/clean_layer.sh
+    clean-layer.sh
 
 # SSH Server
 ## Install & Prepare SSH
@@ -49,7 +49,7 @@ RUN \
     pip install kubernetes && \
     pip install docker && \
     # Cleanup
-    $_RESOURCES_PATH/clean_layer.sh
+    clean-layer.sh
 
 ## Create user with restricted permissions for ssh
 # https://gist.github.com/smoser/3e9430c51e23e0c0d16c359a2ca668ae
@@ -69,7 +69,20 @@ RUN useradd -d /home/limited-user -m -s /bin/true --gid nogroup --skel /dev/null
 COPY docker-res/start_ssh.py $_RESOURCES_PATH/start_ssh.py
 COPY docker-res/ssh/* /etc/ssh/
 
+# Set default configuration
+ENV SSH_PERMIT_TARGET_HOST="*" \
+    SSH_PERMIT_TARGET_PORT="*" \ 
+    SSH_TARGET_KEY_PATH="~/.ssh/id_ed25519.pub" \ 
+    MANUAL_AUTH_FILE="false" \
+    SSHD_ENVIRONMENT_VARIABLES="${_RESOURCES_PATH}/sshd_environment" \
+    SSH_TARGET_PUBLICKEY_API_PORT=8080
+
 RUN \
-    chmod -R ug+rwx $_RESOURCES_PATH
+    chmod -R ug+rwx $_RESOURCES_PATH && \
+    touch $SSHD_ENVIRONMENT_VARIABLES && \
+    chmod a+r $SSHD_ENVIRONMENT_VARIABLES && \
+    # Replace the environment variable in the script directly here, since the script is executed from sshd shell and cannot 
+    # access the environment variable directly 
+    sed -i 's@$SSHD_ENVIRONMENT_VARIABLES@'"$SSHD_ENVIRONMENT_VARIABLES"'@g' /etc/ssh/authorize.sh
 
 ENTRYPOINT python $_RESOURCES_PATH/start_ssh.py
