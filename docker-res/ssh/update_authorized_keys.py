@@ -148,7 +148,7 @@ def get_authorized_keys_docker(query_cache: list = []) -> (list, list):
 
         key = None
         # Try to get the public key via an API call first
-        publickey_url = "http://{}:{}/publickey".format(container.id, str(SSH_TARGET_PUBLICKEY_API_PORT))
+        publickey_url = "http://{}:{}/publickey".format(container.name, str(SSH_TARGET_PUBLICKEY_API_PORT))
         timeout_seconds = 10
         try:
             request = requests.request("GET", publickey_url, timeout=timeout_seconds)
