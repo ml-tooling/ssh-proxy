@@ -32,20 +32,19 @@ This SSH proxy can be deployed as a standalone docker container that allows to p
 - 🛠 Full SSH compatibility (port tunneling, scp, sftp, rsync, sshfs).
 - 📄 Basic access logging based on user logins.
 - 🐳 Easy to deploy via Docker and Kubernetes.
+- 🏗 Use it as a base image in your own Docker image to bring the ssh functionality into it (checkout the [ml-hub Dockerfile](https://github.com/ml-tooling/ml-hub/blob/1ab1c6b1b4b4b8a6fd2f321ccfb9c8f6f0e0c6eb/Dockerfile#L1) as an example)
 
 ## Getting Started
 
 ### Prerequisites
 
-The target containers must run an SSH server and provide a valid public key. The ssh-proxy container will try to get a key from a target container via a `/publickey` endpoint; if this does not exist, the ssh-proxy tries to exec into the target container and search for the publickey under `$SSH_TARGET_KEY_PATH` (default: `~/.ssh/id_ed25519.pub`).
+The target containers must run an SSH server and provide a valid public key. The ssh-proxy container will try to get a key from a target container via a `/publickey` endpoint (e.g. `http://<containername or podid>:8080/publickey`, whereby the port 8080 can be configured via an [environment variable]($SSH_TARGET_PUBLICKEY_API_PORT)); if this does not exist, the ssh-proxy tries to exec into the target container and search for the publickey under `$SSH_TARGET_KEY_PATH` (default: `~/.ssh/id_ed25519.pub`).
 
 > ℹ️ _The SSH proxy accepts an incoming key, if it belongs to one of the targets key, in other words the proxy/bastion server authorizes all target public keys. It is still not possible to login to the proxy directly. The authorization happens only for creating and tunneling the final connection._
 
 Port and hostname of target containers that users are allowed to access can be restricted via environment variables (see [configuration section](#configuration)), but the restrictions can be applied only accross all targets. In Kubernetes mode, the SSH proxy and the SSH targets must be in the same namespace.
 
-> ℹ️ _The implemented behavior can be slow for big clusters, as `kubectl exec` is a quite slow command._
-
-You can avoid those requirements by setting `$MANUAL_AUTH_FILE=true` and maintaing the proxy's `/etc/ssh/authorized_keys_cache` file yourself (e.g. by mounting a file at the same location). In this case, you don't have to mount the Docker socket / Kubernetes config into the container. The `authorized_keys_cache` file has the same format as the standard ssh authorized_keys file.
+We recommend to offer the public key via the `/publickey` endpoint, as the `kubectl exec` command can be slow for big clusters. You can also completely avoid those requirements by setting `$MANUAL_AUTH_FILE=true` and maintaing the proxy's `/etc/ssh/authorized_keys_cache` file yourself (e.g. by mounting a file at the same location). In this case, you don't have to mount the Docker socket / Kubernetes config into the container. The `authorized_keys_cache` file has the same format as the standard ssh authorized_keys file.
 
 ### Start SSH Proxy
 
