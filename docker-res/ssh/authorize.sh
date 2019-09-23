@@ -34,7 +34,7 @@ elif ! grep -q " $public_key " /etc/ssh/authorized_keys_cache; then
     fi
 elif [ $time_difference -ge $CACHE_TIME ]; then
     # Run the python script to update the cache in the background so the command can directly return
-    nohup python /etc/ssh/update_authorized_keys.py > /dev/null 2>&1 &
+    nohup python /etc/ssh/update_authorized_keys.py full > /dev/null 2>&1 &
 fi
 
 # Return the collected keys to the OpenSSH server
