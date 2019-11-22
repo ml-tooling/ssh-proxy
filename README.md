@@ -97,6 +97,11 @@ The container can be configured with the following environment variables (`--env
         <td>*</td>
     </tr>
     <tr>
+        <td>SSH_TARGET_LABELS</td>
+        <td>Specify which containers are targeted. Filters containers / pods via these labels. Must be in the form of "label1=value1,label2=value2,label3=value3". Default is empty string which disables filtering.</td>
+        <td>""</td>
+    </tr>
+    <tr>
         <td>SSH_TARGET_PUBLICKEY_API_PORT</td>
         <td>Port where the target container exposes the /publickey endpoint (if used).</td>
         <td>8080</td>
