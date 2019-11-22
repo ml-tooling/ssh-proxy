@@ -21,6 +21,7 @@ import requests
 SSH_PERMIT_TARGET_HOST = os.getenv("SSH_PERMIT_TARGET_HOST", "*")
 SSH_TARGET_KEY_PATH = os.getenv("SSH_TARGET_KEY_PATH", "~/.ssh/id_ed25519.pub")
 SSH_TARGET_PUBLICKEY_API_PORT = os.getenv("SSH_TARGET_PUBLICKEY_API_PORT", 8080)
+ENV_SSH_TARGET_LABELS = os.getenv("SSH_TARGET_LABELS", "")
 
 authorized_keys_cache_file = "/etc/ssh/authorized_keys_cache"
 authorized_keys_cache_file_lock = "cache_files.lock"
@@ -78,7 +79,7 @@ def get_authorized_keys_kubernetes(query_cache: list = []) -> (list, list):
     """
 
     pod_list = kubernetes_client.list_namespaced_pod(
-        NAMESPACE, field_selector="status.phase=Running")
+        NAMESPACE, field_selector="status.phase=Running", label_selector=SSH_TARGET_LABELS)
     authorized_keys = []
     new_query_cache = []
     for pod in pod_list.items:
@@ -135,7 +136,12 @@ def get_authorized_keys_docker(query_cache: list = []) -> (list, list):
 
     """
 
-    containers = docker_client.containers.list()
+    filters = {"status": "running"}
+    if ENV_SSH_TARGET_LABELS != "":
+        SSH_TARGET_LABELS = ENV_SSH_TARGET_LABELS.split(",")
+        filters.update({"label": SSH_TARGET_LABELS})
+    
+    containers = docker_client.containers.list(filters=filters)
     authorized_keys = []
     new_query_cache = []
     for container in containers:
@@ -154,8 +160,8 @@ def get_authorized_keys_docker(query_cache: list = []) -> (list, list):
             request = requests.request("GET", publickey_url, timeout=timeout_seconds)
             if request.status_code == 200:
                 key = request.text
-        except requests.exceptions.ConnectTimeout:
-            print("Connection to {ip} timed out after {timeout} seconds. Will try to exec into the pod to retrieve the key.".format(ip=pod_ip, timeout=str(timeout_seconds)))
+        except (requests.exceptions.ConnectionError, requests.exceptions.ConnectTimeout):
+            print("Connection to {ip} timed out after {timeout} seconds. Will try to exec into the pod to retrieve the key.".format(ip=container.id, timeout=str(timeout_seconds)))
 
         if key is None:
             exec_result = container.exec_run(PRINT_KEY_COMMAND)
