@@ -79,7 +79,7 @@ def get_authorized_keys_kubernetes(query_cache: list = []) -> (list, list):
     """
 
     pod_list = kubernetes_client.list_namespaced_pod(
-        NAMESPACE, field_selector="status.phase=Running", label_selector=SSH_TARGET_LABELS)
+        NAMESPACE, field_selector="status.phase=Running", label_selector=ENV_SSH_TARGET_LABELS)
     authorized_keys = []
     new_query_cache = []
     for pod in pod_list.items:
